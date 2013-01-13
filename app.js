@@ -6,13 +6,9 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , redis = require('redis')
-  , mongo = require('mongodb')
-  , sockio = require('socket.io')
-  , vizsock = require('./sockets/visualization');
+  , sockio = require('socket.io');
 
 var app = module.exports = express.createServer();
-var db = redis.createClient();
 var io = sockio.listen(app);
 
 // Configuration
@@ -25,7 +21,6 @@ app.configure(function() {
   app.use(express.cookieParser());
   app.use(express.session({ secret: 'your secret here' }));
   app.use(require('stylus').middleware({ src: __dirname + '/public' }));
-
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
