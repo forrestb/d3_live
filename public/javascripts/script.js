@@ -1,10 +1,3 @@
-d3.svgProjection.init("test_serial");
-var socketManager = d3.svgProjection.stateManager.socket;
-
-socketManager.on('transformationResponse', function(msg) {
-  tick(null, msg);
-});
-
 // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
 var links = [
   {source: "Microsoft", target: "Amazon", type: "licensing"},
@@ -119,19 +112,6 @@ text.append("svg:text")
 // Use elliptical arc path segments to doubly-encode directionality.
 function tick(choices, specifications) {
 
-  if (specifications) {
-    path.attr("d", function(d,i) {
-      return specifications.ptrans[i];
-    });
-    circle.attr("transform", function(d,i) {
-      return specifications.ctrans[i];
-    });
-    text.attr("transform", function(d,i) {
-      return specifications.ttrans[i];
-    });
-    return;
-  }
-
   var textTransformation = []
     , circleTransformation = []
     , pathTransformation = [];
@@ -156,12 +136,6 @@ function tick(choices, specifications) {
     textTransformation.push(textTemp); 
     return textTemp;
   });
-
-  //=====> Projecting the visualization
-  path.project();
-  circle.project();
-  text.project();
-  //=====> Finished Projecting
 
 }
 

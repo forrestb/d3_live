@@ -15,17 +15,6 @@ var app = module.exports = express.createServer();
 var db = redis.createClient();
 var io = sockio.listen(app);
 
-var mongo_server = new mongo.Server("localhost", 27017);
-var mongo_connector =  new mongo.Db('crunchbase_database', mongo_server);
-
-mongo_connector.open( function(err, db) {
-
-  db.collectionNames(function(err, collections){
-    console.log(collections);
-  });
-
-});
-
 // Configuration
 
 app.configure(function() {
@@ -58,10 +47,7 @@ io.sockets.on('connection', function (socket) {
  
   socket.on('subscribe', function(data) {
 
-   // Joining based on the serial
     socket.join(data.room);
-
-    // Handle error handling
     socket.emit('recConn', { 
       status: 1,
       room: data.room 
@@ -69,8 +55,6 @@ io.sockets.on('connection', function (socket) {
 
   });
  
-  socket.join('d3_visualization');
-
   socket.on('transformationUpdate', function(data) {
     io.sockets.in(data.room).emit('transformationResponse', data.selLocs);
   });
